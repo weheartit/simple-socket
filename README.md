@@ -15,7 +15,9 @@ var Socket = require('simple-socket').Socket;
 
 var socket = new Socket({host: 'localhost', port: 80});
 
-var connect = function() {
+connect();
+
+function connect() {
   if (err) {
     console.log('error connecting to server', err.stack);
     console.log('attempting to reconnect in 1 second');
@@ -46,7 +48,6 @@ var connect = function() {
 
   // socket.pipe(destination) is also available
 
-  connect();
 };
 
 ```
