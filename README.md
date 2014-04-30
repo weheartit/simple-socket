@@ -30,9 +30,7 @@ function connect() {
   // reconnect when there is a socket timeout
   socket.onTimeout = function() {
     // disconnect clears all state
-    socket.disconnect(function() {
-      connect();
-    });
+    socket.disconnect(connect);
   };
 
   // handle incoming data
