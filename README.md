@@ -1,6 +1,6 @@
 # Simple Socket
 
-This is a lightweight wrapper around the node.js `Socket` class that makes reconnecting and handling errors super simple. It works with `net` and `tls`.
+This is a lightweight wrapper around the Node.js `Socket` class that makes reconnecting and handling errors super simple. It works with `net` and `tls`.
 
 ## Installation
 
