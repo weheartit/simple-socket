@@ -36,8 +36,9 @@ function connect() {
       // if you don't want to reconnect
       // socket.onDisconnect = null;
 
-      // disconnect clears all state
-      socket.disconnect(connect);
+      // disconnect clears all state and onDisconnect will
+      // get called
+      socket.disconnect();
     };
 
     // handle incoming data
