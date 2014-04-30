@@ -32,6 +32,10 @@ function connect() {
 
     // reconnect when there is a socket timeout
     socket.onTimeout = function() {
+      // set onDisconnect to null before disconnect
+      // if you don't want to reconnect
+      // socket.onDisconnect = null;
+
       // disconnect clears all state
       socket.disconnect(connect);
     };
