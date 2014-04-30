@@ -98,7 +98,6 @@ Socket.prototype.handleClose = function() {
   var self = this;
   self.handleCallback('close', function(err) {
     err && debug && debug('unexpected socket error', err.stack);
-    if (!self.socket) return;
     self.socket = null;
     if (self.onDisconnect) self.onDisconnect();
   });
