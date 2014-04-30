@@ -47,7 +47,6 @@ function connect() {
   };
 
   // socket.pipe(destination) is also available
-
 };
 
 ```
