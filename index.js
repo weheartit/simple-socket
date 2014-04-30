@@ -72,7 +72,13 @@ Socket.prototype.pipe = function(dest) {
 };
 
 Socket.prototype.write = function() {
-  this.socket.write.apply(this.socket, arguments);
+  var args = Array.prototype.slice.call(arguments)
+  var callback = args.pop()
+  var sent = this.socket.write.apply(this.socket, args);
+  if (_.isFunction(callback) {
+    if (sent) return callback();
+    this.handleCallback('drain', callback);
+  }
 };
 
 Socket.prototype.addCloseListener = function(callback) {
