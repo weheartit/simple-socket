@@ -1,6 +1,6 @@
 # Simple Socket
 
-This is a lightweight wrapper around the node.js socket that makes reconnecting and handling errors super simple. It works with `net` and `tls`.
+This is a lightweight wrapper around the node.js `Socket` class that makes reconnecting and handling errors super simple. It works with `net` and `tls`.
 
 ## Installation
 
@@ -18,6 +18,7 @@ var socket = new Socket({host: 'localhost', port: 80});
 var connect = function() {
   if (err) {
     console.log('error connecting to server', err.stack);
+    console.log('attempting to reconnect in 1 second');
     setTimeout(connect, 1000);
   }
 
@@ -44,6 +45,8 @@ var connect = function() {
   };
 
   // socket.pipe(destination) is also available
+
+  connect();
 };
 
 ```
