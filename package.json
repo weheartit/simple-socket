@@ -1,0 +1,14 @@
+{
+  "name": "simple-socket",
+  "version": "0.0.0",
+  "description": "a tiny wrapper around the node.js socket that makes handling errors and reconnecting simpler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "socket"
+  ],
+  "author": "Dan McAulay",
+  "license": "BSD-2-Clause"
+}
