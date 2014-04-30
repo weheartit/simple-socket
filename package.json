@@ -10,5 +10,8 @@
     "socket"
   ],
   "author": "Dan McAulay",
-  "license": "BSD-2-Clause"
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
 }
