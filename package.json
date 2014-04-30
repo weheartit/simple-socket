@@ -1,6 +1,6 @@
 {
   "name": "simple-socket",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "a tiny wrapper around the node.js socket that makes handling errors and reconnecting simpler",
   "main": "index.js",
   "scripts": {
