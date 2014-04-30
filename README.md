@@ -18,35 +18,39 @@ var socket = new Socket({host: 'localhost', port: 80});
 connect();
 
 function connect() {
-  if (err) {
-    console.log('error connecting to server', err.stack);
-    console.log('attempting to reconnect in 1 second');
-    setTimeout(connect, 1000);
-  }
+  socket.connect(connectHandler);
 
-  // reconnect when the socket is disconnected
-  socket.onDisconnect = connect;
-
-  // reconnect when there is a socket timeout
-  socket.onTimeout = function() {
-    // disconnect clears all state
-    socket.disconnect(connect);
-  };
-
-  // handle incoming data
-  socket.onData = function(data) {
-    // socket.writeable() will return false if the socket is 
-    // disconnected or the underlying socket is not writable
-    if (socket.writable()) {
-      // socket.write() will callback with an error 
-      // (close events before drain are treated as an error)
-      socket.write(data, function(err) {
-        if (err) console.error('unexepected error', err.stack);
-      });
+  function connectHandler(err) {
+    if (err) {
+      console.log('error connecting to server', err.stack);
+      console.log('attempting to reconnect in 1 second');
+      setTimeout(connect, 1000);
     }
-  };
 
-  // socket.pipe(destination) is also available
+    // reconnect when the socket is disconnected
+    socket.onDisconnect = connect;
+
+    // reconnect when there is a socket timeout
+    socket.onTimeout = function() {
+      // disconnect clears all state
+      socket.disconnect(connect);
+    };
+
+    // handle incoming data
+    socket.onData = function(data) {
+      // socket.writeable() will return false if the socket is 
+      // disconnected or the underlying socket is not writable
+      if (socket.writable()) {
+        // socket.write() will callback with an error 
+        // (close events before drain are treated as an error)
+        socket.write(data, function(err) {
+          if (err) console.error('unexepected error', err.stack);
+        });
+      }
+    };
+
+    // socket.pipe(destination) is also available
+  };
 };
 
 ```
