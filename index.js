@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash');
 var net = require('net');
 var tls = require('tls');
 var debug;
