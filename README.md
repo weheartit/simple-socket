@@ -38,7 +38,7 @@ function connect() {
     // socket.writeable() will return false if the socket is 
     // disconnected or the underlying socket is not writable
     if (socket.writable()) {
-      // write will callback with an error 
+      // socket.write() will callback with an error 
       // (close events before drain are treated as an error)
       socket.write(data, function(err) {
         if (err) console.error('unexepected error', err.stack);
