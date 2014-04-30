@@ -77,7 +77,7 @@ Socket.prototype.write = function() {
   var sent = this.socket.write.apply(this.socket, args);
   if (_.isFunction(callback) {
     if (sent) return callback();
-    this.handleCallback('drain', callback);
+    this.handleCallbackWithClose('drain', callback);
   }
 };
 
@@ -123,6 +123,23 @@ Socket.prototype.handleCallback = function(successEvent, callback) {
 
   socket.on(successEvent, callbackHandler);
   socket.on('error', callbackHandler);
+};
+
+Socket.prototype.handleCallbackWithClose = function(successEvent, callack) {
+  var socket = this.socket;
+
+  debug && debug(successEvent + ' adding handler with close');
+  var callbackHandler = function(err) {
+    debug && debug(successEvent + ' complete ' + (err && err.stack));
+
+    socket.removeListener(successEvent, callbackHandler);
+    removeCloseListener(callbackHandler);
+
+    callack.apply(null, arguments);
+  };
+
+  self.socket.on(successEvent, handler);
+  var removeCloseListener = this.addCloseListener(handler);
 };
 
 module.exports = {
