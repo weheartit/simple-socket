@@ -55,13 +55,12 @@ Socket.prototype.connect = function(callback) {
 };
 
 Socket.prototype.disconnect = function(callback) {
-  var self = this;
-  debug && debug('socket disconnect');
-  if (!self.socket) return callback && callback();
+  if (!this.socket) return callback && callback();
 
-  self.socket.end();
-  self.socket.on('close', function() { callback && callback(); });
-  self.socket = null;
+  debug && debug('socket disconnect');
+  this.socket.end();
+  this.socket.on('close', function() { callback && callback(); });
+  this.socket = null;
 };
 
 Socket.prototype.onData = function(callback) {
@@ -92,6 +91,8 @@ Socket.prototype.addCloseListener = function(callback) {
 Socket.prototype.handleClose = function() {
   var self = this;
   self.handleCallback('close', function(err) {
+    err && debug && debug('unexpected socket error', err.stack);
+    if (!self.socket) return;
     self.socket = null;
     if (self.onDisconnect) self.onDisconnect();
   });
@@ -99,7 +100,7 @@ Socket.prototype.handleClose = function() {
 
 Socket.prototype.handleTimeout = function() {
   debug && debug('socket timeout');
-  if (this.onReconnect) this.onReconnect();
+  if (this.onTimeout) this.onTimeout();
 };
 
 Socket.prototype.handleCallback = function(successEvent, callback) {
