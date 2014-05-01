@@ -75,7 +75,7 @@ Socket.prototype.write = function() {
   var args = Array.prototype.slice.call(arguments)
   var callback = args.pop()
   var sent = this.socket.write.apply(this.socket, args);
-  if (_.isFunction(callback) {
+  if (_.isFunction(callback)) {
     if (sent) return callback();
     this.handleCallbackWithClose('drain', callback);
   }
