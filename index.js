@@ -68,7 +68,7 @@ Socket.prototype.onData = function(callback) {
 };
 
 Socket.prototype.pipe = function(dest) {
-  this.socket.pipe(dest);
+  return this.socket.pipe(dest);
 };
 
 Socket.prototype.write = function() {
