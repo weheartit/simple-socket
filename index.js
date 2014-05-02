@@ -140,8 +140,8 @@ Socket.prototype.handleCallbackWithClose = function(successEvent, callack) {
     callack.apply(null, arguments);
   };
 
-  socket.on(successEvent, handler);
-  var removeCloseListener = this.addCloseListener(handler);
+  socket.on(successEvent, callbackHandler);
+  var removeCloseListener = this.addCloseListener(callbackHandler);
 };
 
 module.exports = {
