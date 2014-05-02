@@ -47,7 +47,9 @@ Socket.prototype.connect = function(callback) {
   self.handleCallback(connectEvent, function(err) {
     if (err) { 
       self.socket = null;
-    } else {
+    } else if (!self.socket) { // disconnect was called
+      return callback(new Error('socket disconnected'))
+    }else {
       self.handleClose();
     }
     callback(err);
@@ -138,7 +140,7 @@ Socket.prototype.handleCallbackWithClose = function(successEvent, callack) {
     callack.apply(null, arguments);
   };
 
-  self.socket.on(successEvent, handler);
+  socket.on(successEvent, handler);
   var removeCloseListener = this.addCloseListener(handler);
 };
 
