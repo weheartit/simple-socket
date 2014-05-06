@@ -11,6 +11,7 @@ var defaultOptions = {
 
 var Socket = function(options) {
   this.options = _.defaults(options, defaultOptions);
+  this.debug = this.options.debug;
 };
 
 Socket.prototype.writable = function() {
@@ -26,21 +27,21 @@ Socket.prototype.connect = function(callback) {
   var options = _.pick(self.options, 'host', 'port', 'key', 'cert', 'ca', 'rejectUnauthorized');
   var connectEvent;
   if (options.key) {
-    debug && debug('making ssl connection');
+    self.debug && self.debug('making ssl connection');
     self.socket = tls.connect(options);
     connectEvent = 'secureConnect';
   } else {
-    debug && debug('making non-ssl connection');
+    self.debug && self.debug('making non-ssl connection');
     self.socket = net.connect(options);
     connectEvent = 'connect';
   }
 
   // set timeout
-  debug && debug('setting connection timeout to ' + self.options.timeout);
+  self.debug && self.debug('setting connection timeout to ' + self.options.timeout);
   self.socket.setTimeout(self.options.timeout, self.handleTimeout.bind(self));
 
   // set delay
-  debug && debug('setting no delay to' + self.options.noDelay);
+  self.debug && self.debug('setting no delay to' + self.options.noDelay);
   self.socket.setNoDelay(self.options.noDelay);
 
   // event handlers
@@ -59,7 +60,7 @@ Socket.prototype.connect = function(callback) {
 Socket.prototype.disconnect = function(callback) {
   if (!this.socket) return callback && callback();
 
-  debug && debug('socket disconnect');
+  this.debug && this.debug('socket disconnect');
   this.socket.end();
   this.socket.on('close', function() { callback && callback(); });
   this.socket = null;
@@ -99,23 +100,24 @@ Socket.prototype.addCloseListener = function(callback) {
 Socket.prototype.handleClose = function() {
   var self = this;
   self.handleCallback('close', function(err) {
-    err && debug && debug('unexpected socket error', err.stack);
+    err && self.debug && self.debug('unexpected socket error', err.stack);
     self.socket = null;
     if (self.onDisconnect) self.onDisconnect();
   });
 };
 
 Socket.prototype.handleTimeout = function() {
-  debug && debug('socket timeout');
+  self.debug && self.debug('socket timeout');
   if (this.onTimeout) this.onTimeout();
 };
 
 Socket.prototype.handleCallback = function(successEvent, callback) {
   var socket = this.socket;
+  var self = this;
 
-  debug && debug(successEvent + ' adding handler');
+  self.debug && self.debug(successEvent + ' adding handler');
   var callbackHandler = function(err) {
-    debug && debug(successEvent + ' complete ' + (err && err.stack));
+    self.debug && self.debug(successEvent + ' complete ' + (err && err.stack));
 
     socket.removeListener(successEvent, callbackHandler);
     socket.removeListener('error', callbackHandler);
@@ -128,11 +130,12 @@ Socket.prototype.handleCallback = function(successEvent, callback) {
 };
 
 Socket.prototype.handleCallbackWithClose = function(successEvent, callack) {
+  var self = this;
   var socket = this.socket;
 
-  debug && debug(successEvent + ' adding handler with close');
+  self.debug && self.debug(successEvent + ' adding handler with close');
   var callbackHandler = function(err) {
-    debug && debug(successEvent + ' complete ' + (err && err.stack));
+    self.debug && self.debug(successEvent + ' complete ' + (err && err.stack));
 
     socket.removeListener(successEvent, callbackHandler);
     removeCloseListener(callbackHandler);
@@ -144,9 +147,4 @@ Socket.prototype.handleCallbackWithClose = function(successEvent, callack) {
   var removeCloseListener = this.addCloseListener(callbackHandler);
 };
 
-module.exports = {
-  Socket: Socket,
-  debug: function(debugCallback) {
-    debug = debugCallback;
-  }
-};
+module.exports = Socket;
