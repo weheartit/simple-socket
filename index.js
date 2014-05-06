@@ -107,7 +107,7 @@ Socket.prototype.handleClose = function() {
 };
 
 Socket.prototype.handleTimeout = function() {
-  self.debug && self.debug('socket timeout');
+  this.debug && this.debug('socket timeout');
   if (this.onTimeout) this.onTimeout();
 };
 
