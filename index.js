@@ -24,7 +24,7 @@ Socket.prototype.connect = function(callback) {
   var self = this;
 
   // connect
-  var options = _.pick(self.options, 'host', 'port', 'key', 'cert', 'ca', 'rejectUnauthorized');
+  var options = _.pick(self.options, 'host', 'port', 'key', 'cert', 'ca', 'rejectUnauthorized', 'servername', 'requestCert');
   var connectEvent;
   if (options.key) {
     self.debug && self.debug('making ssl connection');
